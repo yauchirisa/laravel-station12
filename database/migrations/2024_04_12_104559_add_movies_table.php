@@ -14,13 +14,12 @@ class AddMoviesTable extends Migration
     public function up()
     {
 
-        if(Schema::hasTable('movies')){
-            return;
-        }
+        if (!Schema::hasColumn('movies', 'title')) {
 
         schema::table('movies', function(Blueprint $table) {
             $table->unique('title');
         });
+    }
     }
 
     /**
@@ -30,6 +29,12 @@ class AddMoviesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('movies');
+        if (Schema::hasColumn('movies', 'title')) {
+            Schema::table('movies', function (Blueprint $table) {
+                // 'title' 列の一意制約を削除する
+                $table->dropUnique(['title']);
+            });
+        }
     }
+
 }

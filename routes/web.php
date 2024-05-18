@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\PracticeController;
 use App\Http\Controllers\MovieController;
+use App\Http\Controllers\SheetController;
+use App\Http\Controllers\ScheduleController;
 use App\Models\Movie;
 
 // Route::get('URL', [Controllerの名前::class, 'Controller内のfunction名']);
@@ -46,3 +48,15 @@ Route::delete('/admin/movies/{id}/destroy', [MovieController::class, 'destroy'])
 
 //検索
 Route::get('/movies', [MovieController::class, 'index'])->name('lists.index');
+
+//詳細
+Route::get('/admin/movies/{id}', [MovieController::class, 'show'])->name('lists.show');
+
+
+
+
+//座席表
+Route::get('/sheets', [SheetController::class, 'index'])->name('sheets.index');
+
+//スケジュール
+Route::get('/schedules', [ScheduleController::class, 'index'])->name('schedules.index');

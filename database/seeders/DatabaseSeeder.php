@@ -1,8 +1,6 @@
 <?php
 
 namespace Database\Seeders;
-use App\Practice;
-use App\Models\Movie;
 
 use Illuminate\Database\Seeder;
 
@@ -16,6 +14,8 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call(MovieSeeder::class);
+        $this->call(SheetSeeder::class);
+        $this->call(ScheduleSeeder::class);
 
     }
 

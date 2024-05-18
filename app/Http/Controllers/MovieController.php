@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Movie;
 use App\Models\Genre;
+use App\Models\Schedule;
 use App\Http\Requests\MovieRequest;
 use App\Http\Requests\UpdateMovieRequest;
 use Illuminate\Support\Facades\DB;
@@ -80,8 +81,8 @@ class MovieController extends Controller
            DB::rollback();
            $exceptionMessage = $e->getMessage();
            \Log::error('映画の登録中にエラーが発生しました' . $exceptionMessage);
-           //return response()->json(['error' => '映画の登録中にエラーが発生しました'], 500);
-           return redirect('/admin/movies/create')->with('error', '映画の登録中にエラーが発生しました');
+           return response()->json(['error' => '映画の登録中にエラーが発生しました'], 500);
+           //return redirect('/admin/movies/create')->with('error', '映画の登録中にエラーが発生しました');
        }
 
    }
@@ -132,11 +133,10 @@ class MovieController extends Controller
              DB::rollback();
              $exceptionMessage = $e->getMessage();
              \Log::error('映画の登録中にエラーが発生しました' . $exceptionMessage);
-             //return response()->json(['error' => '映画の更新中にエラーが発生しました'], 500);
-             return redirect()->back()->with('error', '映画の更新中にエラーが発生しました');
+             return response()->json(['error' => '映画の更新中にエラーが発生しました'], 500);
+             //return redirect()->back()->with('error', '映画の更新中にエラーが発生しました');
          }
      }
-
 
 
 
@@ -151,6 +151,20 @@ class MovieController extends Controller
         // idを条件に該当レコードを削除
         Movie::where('id', $request->id)->delete();
         return redirect('/admin/movies')->with('message', '削除しました');
+    }
+
+
+    //詳細画面
+    public function show(Request $request, $id)
+    {
+        //$movie = Movie::with('schedules')->find($id);
+        //$movie = Movie::find($id);
+        //$schedules = Schedule::orderBy('start_time')->get();
+        //return view('lists.show', compact('movie', 'schedules'));
+
+        $movie = Movie::find($id);
+        $schedules = Schedule::where('movie_id', $id)->orderBy('start_time')->get();
+        return view('lists.show', compact('movie', 'schedules'));
     }
 
 

@@ -32,6 +32,7 @@ class MovieFactory extends Factory
             'is_showing'=> $this->faker->boolean(),
             'description'=> $this->faker->text(10),
             'genre_id'=> Genre::factory()
+
         ];
     }
 }

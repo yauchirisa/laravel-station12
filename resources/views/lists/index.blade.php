@@ -40,6 +40,7 @@
             <td>{{ $list->genre->name }}</td>
             <td>{{ $list->created_at }}</td>
             <td>{{ $list->updated_at }}</td>
+            <td><a href="{{ route('lists.show', ['id' => $list->id]) }}">詳細</a></td>
         @endforeach
         {{ $lists->links() }}
     </table>
