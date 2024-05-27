@@ -9,7 +9,7 @@
 <body>
 
   <form method="POST" action="{{ route('lists.update', ['id' => $list->id])}}" class="form">
-  {{ csrf_field() }}
+    {{ csrf_field() }}
   @method('PATCH')
 
     <div class="form-group">

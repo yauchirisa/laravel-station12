@@ -10,12 +10,19 @@ class Schedule extends Model
     use HasFactory;
 
     protected $fillable = [
-        'movie_id', 'start_time', 'end_time',
+        'movie_id',
+        'start_time',
+        'end_time',
+    ];
+
+    protected $dates = [
+        'created_at',
+        'updated_at',
     ];
 
     protected $casts = [
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
+        'start_time' => 'datetime',
+        'end_time' => 'datetime',
     ];
 
     public function movie()

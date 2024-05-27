@@ -21,4 +21,6 @@ class ScheduleFactory extends Factory
             'end_time' => CarbonImmutable::now()->addHours(2),
         ];
     }
+
+
 }

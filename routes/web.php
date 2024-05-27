@@ -50,13 +50,47 @@ Route::delete('/admin/movies/{id}/destroy', [MovieController::class, 'destroy'])
 Route::get('/movies', [MovieController::class, 'index'])->name('lists.index');
 
 //詳細
-Route::get('/admin/movies/{id}', [MovieController::class, 'show'])->name('lists.show');
+Route::get('/movies/{id}', [MovieController::class, 'show'])->name('lists.show');
+
+
+
+//管理画面詳細
+Route::get('/admin/movies/{id}', [MovieController::class, 'AdminShow'])->name('lists.admin_show');
+
+
+//スケジュール
+Route::get('/schedules', [ScheduleController::class, 'index'])->name('schedules.index');
+
+
+//スケジュール一覧
+Route::get('/admin/schedules', [ScheduleController::class, 'index'])->name('schedules.index');
+
+
+//スケジュール詳細
+Route::get('/admin/schedules/{id}', [ScheduleController::class, 'show'])->name('schedules.show');
+
+
+
+//スケジュール新規登録画面
+Route::get('/admin/movies/{id}/schedules/create', [ScheduleController::class, 'create'])->name('schedules.create');
+
+//スケジュール新規登録送信
+Route::post('/admin/movies/{id}/schedules/store', [ScheduleController::class, 'store'])->name('schedules.store');
+
+//スケジュール編集画面
+Route::get('/admin/schedules/{scheduleId}/edit', [ScheduleController::class, 'edit'])->name('schedules.edit');
+
+//スケジュール削除
+Route::delete('/admin/schedules/{id}/destroy', [ScheduleController::class, 'destroy'])->name('schedules.destroy');
+
+//スケジュール更新
+Route::patch('/admin/schedules/{id}/update', [ScheduleController::class, 'update'])->name('schedules.update');
+
+
+
 
 
 
 
 //座席表
 Route::get('/sheets', [SheetController::class, 'index'])->name('sheets.index');
-
-//スケジュール
-Route::get('/schedules', [ScheduleController::class, 'index'])->name('schedules.index');

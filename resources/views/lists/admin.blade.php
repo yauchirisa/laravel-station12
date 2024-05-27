@@ -41,6 +41,8 @@
                 <button type="submit">削除</button>
             </form>
             </td>
+
+            <td><a href="{{ route('lists.admin_show', ['id' => $list->id]) }}">詳細</a></td>
         </tr>
         @endforeach
     </table>
