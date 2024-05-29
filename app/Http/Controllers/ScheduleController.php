@@ -6,6 +6,7 @@ use App\Models\Schedule;
 use App\Models\Movie;
 use Carbon\Carbon;
 use App\Http\Requests\UpdateScheduleRequest;
+use App\Http\Requests\CreateScheduleRequest;
 
 use Illuminate\Http\Request;
 
@@ -47,6 +48,23 @@ class ScheduleController extends Controller
         $schedule = Schedule::findOrFail($id);
         $movieId = $schedule->movie_id;
 
+        $startTime = new Carbon($request->start_time_time);
+        $endTime = new Carbon($request->end_time_time);
+
+        if($startTime->gte($endTime)) {
+            return redirect()
+                    ->route('schedules.edit', ['scheduleId' => $id])
+                    ->with(['time_error' => '時間の設定を確認してください。']);
+        }
+
+        $diffInMinutes = $endTime->diffInMinutes($startTime);
+
+        if($diffInMinutes < 5) {
+            return redirect()
+                    ->route('schedules.edit', ['scheduleId' => $id])
+                    ->with(['time_error' => '5分以上間隔をあけてください。']);
+        }
+
         $startTime = $request->input('start_time_date') . ' ' . $request->input('start_time_time');
         $endTime = $request->input('end_time_date') . ' ' . $request->input('end_time_time');
 
@@ -55,7 +73,7 @@ class ScheduleController extends Controller
 
         $schedule->save();
 
-        return redirect()->route('lists.admin_show', ['id' => $schedule->movie_id]);
+        return redirect()->route('lists.admin_show', ['id' => $movieId]);
     }
 
     //スケジュール削除
@@ -78,14 +96,32 @@ class ScheduleController extends Controller
 
 
     //スケジュール作成処理
-    public function store(Request $request, $movieId)
+    public function store(CreateScheduleRequest $request, $movieId)
     {
+        $startTime = new Carbon($request->start_time_time);
+        $endTime = new Carbon($request->end_time_time);
 
-        Schedule::create([
+        if($startTime->gte($endTime)) {
+            return redirect()
+                    ->route('schedules.create', ['id' => $movieId])
+                    ->with(['time_error' => '時間の設定を確認してください。']);
+        }
+
+        $diffInMinutes = $endTime->diffInMinutes($startTime);
+
+        if($diffInMinutes < 5) {
+            return redirect()
+                    ->route('schedules.create', ['id' => $movieId])
+                    ->with(['time_error' => '5分以上間隔をあけてください。']);
+        }
+
+        Schedule::insert([
             'movie_id' => $request->movie_id,
             'start_time' => $request->start_time_date . ' ' . $request->start_time_time,
             'end_time' => $request->end_time_date . ' ' . $request->end_time_time,
         ]);
+
+
 
         return redirect()->route('lists.admin_show', ['id' => $movieId])->with('success', '新しいスケジュールが作成されました！');
     }

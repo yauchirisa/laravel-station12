@@ -10,18 +10,14 @@
     <h1>スケジュール更新</h1>
 
     <form method="POST" action="{{ route('schedules.update', ['id' => $schedule->id]) }}" >
+        @foreach ($errors->all() as $error)
+        {{$error}}<br>
+        @endforeach
+        @if (session('time_error'))
+        {{ session('time_error') }}<br>
+        @endif
         @csrf
         @method('PATCH')
-
-        @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-        @endif
 
         <input type="hidden" id="movie_id" name="movie_id" value="{{ $schedule->movie_id }}">
 

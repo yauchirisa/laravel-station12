@@ -10,7 +10,14 @@
     <h1>新規スケジュール</h1>
 
     <form action="{{ route('schedules.store', ['id' => $movie->id]) }}" method="POST">
+        @foreach ($errors->all() as $error)
+        {{$error}}<br>
+        @endforeach
+        @if (session('time_error'))
+        {{ session('time_error') }}<br>
+        @endif
         @csrf
+
         <input type="hidden" name="movie_id" value="{{ $movie->id }}">
 
         <label for="start_time_date">開始日:</label>
