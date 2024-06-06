@@ -13,8 +13,8 @@
         @foreach ($errors->all() as $error)
         {{$error}}<br>
         @endforeach
-        @if (session('time_error'))
-        {{ session('time_error') }}<br>
+        @if (session('error'))
+        {{ session('error') }}<br>
         @endif
         @csrf
 
