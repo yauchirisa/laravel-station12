@@ -31,6 +31,10 @@ class CreateScheduleRequest extends FormRequest
             'start_time_time' => ['required', 'date_format:H:i', 'before:end_time_time',
             function ($attribute, $value, $fail) {
                 // ここに処理を書く
+                if (!preg_match('/^\d{1,2}:\d{2}$/', $value)) {
+                    $fail('時間のフォーマットが無効です。');
+                    return;
+                    }
                 $startTime = Carbon::createFromFormat('H:i', $value);
                 $endTime = Carbon::createFromFormat('H:i', $this->input('end_time_time'));
 
@@ -38,7 +42,7 @@ class CreateScheduleRequest extends FormRequest
 
                 if ($diffInMinutes < 6) {
                     $fail("5分以上あけてください。");
-                return redirect('/admin/movies/{id}/schedules/create');
+
                 }
             },
         ],
@@ -47,7 +51,10 @@ class CreateScheduleRequest extends FormRequest
             'end_time_time' => ['required', 'date_format:H:i', 'after:start_time_time',
 
             function ($attribute, $value, $fail) {
-                // ここに処理を書く
+                if (!preg_match('/^\d{1,2}:\d{2}$/', $value)) {
+                    $fail('時間のフォーマットが無効です。');
+                    return;
+                    }
                 $endTime = Carbon::createFromFormat('H:i', $value);
                 $startTime = Carbon::createFromFormat('H:i', $this->input('start_time_time'));
 
@@ -55,7 +62,7 @@ class CreateScheduleRequest extends FormRequest
 
                 if ($diffInMinutes < 6) {
                     $fail("5分以上あけてください。");
-                return redirect('/admin/movies/{id}/schedules/create');
+
                 }
             },
         ],

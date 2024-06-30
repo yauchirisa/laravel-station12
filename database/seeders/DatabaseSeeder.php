@@ -13,9 +13,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(MovieSeeder::class);
-        $this->call(SheetSeeder::class);
-        $this->call(ScheduleSeeder::class);
+        $this->call([
+            AttachUsersToReservationsSeeder::class,
+            ScreenSeeder::class,
+            ScheduleSeeder::class,
+            MovieSeeder::class,
+            SheetSeeder::class,
+        ]);
 
     }
 

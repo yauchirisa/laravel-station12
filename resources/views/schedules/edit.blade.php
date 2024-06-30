@@ -31,6 +31,13 @@
         <label for="end_time_time">終了時間:</label>
         <input type="time" id="end_time_time" name="end_time_time" value="{{ $schedule->end_time->format('H:i') }}">
 
+        <label for="screen_id">スクリーン</label>
+        <select name="screen_id" id="screen_id">
+            @foreach($screens as $screen)
+                <option value="{{ $screen->id }}" @if($screen->id === $schedule->screen_id) selected @endif>{{ $screen->name }}</option>
+            @endforeach
+        </select>
+
         <button type="submit">更新</button>
     </form>
 </body>

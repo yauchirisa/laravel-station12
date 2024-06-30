@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Schedule;
 use App\Models\Movie;
+use App\Models\Screen; // 追加
 use Carbon\Carbon;
 use App\Http\Requests\UpdateScheduleRequest;
 use App\Http\Requests\CreateScheduleRequest;
@@ -25,13 +26,6 @@ class ScheduleController extends Controller
     public function show($id)
     {
         $schedule = Schedule::findOrFail($id);
-        /*
-        $schedule1 = Schedule::create([
-            'movie_id' => $id,
-            'start_time' => Carbon::now(),
-            'end_time' => Carbon::now()->addHours(2),
-        ]);
-        */
         return view('schedules.show', compact('schedule'));
     }
 
@@ -39,7 +33,9 @@ class ScheduleController extends Controller
     public function edit($scheduleId)
     {
         $schedule = Schedule::findOrFail($scheduleId);
-        return view('schedules.edit', compact('schedule'));
+        $screens = Screen::all();
+
+        return view('schedules.edit', compact('schedule', 'screens'));
     }
 
     //スケジュール更新
@@ -51,25 +47,13 @@ class ScheduleController extends Controller
         $startTime = new Carbon($request->start_time_time);
         $endTime = new Carbon($request->end_time_time);
 
-        /*if($startTime->gte($endTime)) {
-            return redirect()
-                    ->route('schedules.edit', ['scheduleId' => $id])
-                    ->with(['error' => '時間の設定を確認してください。']);
-        }
-
-        $diffInMinutes = $endTime->diffInMinutes($startTime);
-
-        if($diffInMinutes < 5) {
-            return redirect()
-                    ->route('schedules.edit', ['scheduleId' => $id])
-                    ->with(['error' => '5分以上間隔をあけてください。']);
-        }*/
-
         $startTime = $request->input('start_time_date') . ' ' . $request->input('start_time_time');
         $endTime = $request->input('end_time_date') . ' ' . $request->input('end_time_time');
+        $screenId = $request->input('screen_id');
 
         $schedule->start_time = Carbon::parse($startTime);
         $schedule->end_time = Carbon::parse($endTime);
+        $schedule->screen_id = $screenId;
 
         $schedule->save();
 
@@ -91,34 +75,22 @@ class ScheduleController extends Controller
     public function create($movieId)
     {
         $movie = Movie::find($movieId);
-        return view('schedules.create', compact('movie'));
+        $screens = Screen::all(); // スクリーンを取得する
+
+        return view('schedules.create', compact('movie', 'screens'));
     }
 
 
     //スケジュール作成処理
     public function store(CreateScheduleRequest $request, $movieId)
     {
-        /*$startTime = new Carbon($request->start_time_time);
-        $endTime = new Carbon($request->end_time_time);
 
-        if($startTime->gte($endTime)) {
-            return redirect()
-                    ->route('schedules.create', ['id' => $movieId])
-                    ->with(['error' => '時間の設定を確認してください。']);
-        }
-
-        $diffInMinutes = $endTime->diffInMinutes($startTime);
-
-        if($diffInMinutes < 5) {
-            return redirect()
-                    ->route('schedules.create', ['id' => $movieId])
-                    ->with(['error' => '5分以上間隔をあけてください。']);
-        }*/
-
-        Schedule::insert([
+        // スケジュールを作成
+        Schedule::create([
             'movie_id' => $request->movie_id,
             'start_time' => $request->start_time_date . ' ' . $request->start_time_time,
             'end_time' => $request->end_time_date . ' ' . $request->end_time_time,
+            'screen_id' => $request->input('screen_id'),
         ]);
 
         return redirect()->route('lists.admin_show', ['id' => $movieId])->with('success', '新しいスケジュールが作成されました！');

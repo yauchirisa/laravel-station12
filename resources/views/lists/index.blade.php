@@ -21,6 +21,19 @@
         </form>
         </div>
 
+        <!-- ログインとユーザー登録のリンク -->
+        <div class="auth-links">
+            @guest
+                <a href="{{ route('login') }}">ログイン</a>
+                <a href="{{ route('register') }}">ユーザー登録</a>
+            @else
+                <form id="logout-form" action="{{ route('logout') }}" method="POST">
+            @csrf
+                <button type="submit">ログアウト</button>
+            </form>
+            @endguest
+        </div>
+
 
     <table>
         @foreach ($lists as $list)

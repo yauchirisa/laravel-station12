@@ -28,8 +28,12 @@ class UpdateScheduleRequest extends FormRequest
         return [
             'movie_id' => ['required'],
             'start_time_date' => ['required', 'date_format:Y-m-d', 'before_or_equal:end_time_date'],
-            'start_time_time' => ['required', 'date_format:H:i', 'before:end_time_time', function ($attribute, $value, $fail) {
-           // ここに処理を書く
+            'start_time_time' => ['required', 'date_format:H:i', 'before:end_time_time',
+            function ($attribute, $value, $fail) {
+                if (!preg_match('/^\d{1,2}:\d{2}$/', $value)) {
+                    $fail('時間のフォーマットが無効です。');
+                    return;
+                    }
            $startTime = new Carbon($this->start_time_time);
            $endTime = new Carbon($this->end_time_time);
 
@@ -44,8 +48,12 @@ class UpdateScheduleRequest extends FormRequest
             },],
 
             'end_time_date' => ['required', 'date_format:Y-m-d', 'after_or_equal:start_time_date'],
-            'end_time_time' => ['required', 'date_format:H:i', 'after:start_time_time', function ($attribute, $value = null, $fail) {
-           // ここに処理を書く
+            'end_time_time' => ['required', 'date_format:H:i', 'after:start_time_time',
+            function ($attribute, $value = null, $fail) {
+                if (!preg_match('/^\d{1,2}:\d{2}$/', $value)) {
+                    $fail('時間のフォーマットが無効です。');
+                    return;
+                    }
            $startTime = new Carbon($this->start_time_time);
            $endTime = new Carbon($this->end_time_time);
 

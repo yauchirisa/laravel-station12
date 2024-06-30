@@ -13,4 +13,10 @@ class Sheet extends Model
         'column', 'row',
     ];
 
+    public function reservations() {
+        return $this->hasMany('App\Models\Reservation');
+    }
+
+
+
 }

@@ -13,14 +13,18 @@ class CreateSchedulesTable extends Migration
      */
     public function up()
     {
-        Schema::create('schedules', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('movie_id')->index();
-            $table->foreign('movie_id')->references('id')->on('movies')->cascadeOnUpdate()->cascadeOnDelete();
-            $table->datetime('start_time');
-            $table->datetime('end_time');
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('schedules')) {
+            Schema::create('schedules', function (Blueprint $table) {
+                $table->id();
+                $table->unsignedBigInteger('movie_id')->index();
+                $table->foreign('movie_id')->references('id')->on('movies')->cascadeOnUpdate()->cascadeOnDelete();
+                $table->unsignedBigInteger('screen_id')->nullable()->index();
+                $table->foreign('screen_id')->references('id')->on('screens')->cascadeOnUpdate()->cascadeOnDelete();
+                $table->datetime('start_time');
+                $table->datetime('end_time');
+                $table->timestamps();
+            });
+        }
     }
 
     /**
@@ -30,6 +34,8 @@ class CreateSchedulesTable extends Migration
      */
     public function down()
     {
+        // スケジュールテーブルの削除
         Schema::dropIfExists('schedules');
+
     }
 }

@@ -39,8 +39,12 @@ class MovieController extends Controller
         }
 
         $lists = $query->paginate(20);
-        return view('lists.index', compact('lists')
-    );
+
+
+        $schedules = Schedule::all();
+
+        return view('lists.index', compact('lists', 'schedules'));
+        //return view('lists.index', compact('lists'));
 
     }
 
@@ -196,39 +200,6 @@ class MovieController extends Controller
 
 
 
-    //詳細画面
-
-    /*public function createSchedule($id)
-    {
-
-        if (Schedule::where('movie_id', $id)->exists(3)) {
-            return;
-        }
-
-        Schedule::factory()->times(3)->create();
-    }
-
-
-       $schedule1 = Schedule::create([
-            'movie_id' => $id,
-            'start_time' => Carbon::now(),
-            'end_time' => Carbon::now()->addHours(2),
-       ]);
-
-       $schedule2 = Schedule::create([
-            'movie_id' => $id,
-            'start_time' => Carbon::now()->addHours(1),
-            'end_time' => Carbon::now()->addHours(3),
-        ]);
-
-        $schedule3 = Schedule::create([
-            'movie_id' => $id,
-            'start_time' => Carbon::now()->addHours(3),
-            'end_time' => Carbon::now()->addHours(4),
-       ]);*/
-
-
-
 
     public function show(Request $request, $id)
     {
@@ -260,65 +231,6 @@ class MovieController extends Controller
         return view('lists.show', compact('movie', 'schedules'));
     }
 
-
-
-
-
-
-    /*public function show(Request $request, $id)
-    {
-        $movie = Movie::find($id);
-
-        // 以下のコードを追加
-        $schedules = [];
-        $now = now();
-        for ($i = 0; $i < 3; $i++) {
-            $start_time = $now->copy()->addHours($i * 3); // スケジュールを3時間ごとに作成
-            $end_time = $start_time->copy()->addHours(1);
-            $schedule = Schedule::create([
-                'movie_id' => $id,
-                'start_time' => $start_time,
-                'end_time' => $end_time,
-            ]);
-            $schedules[] = $schedule;
-        }
-    // ここまでのコードを追加
-
-        $dbSchedules = Schedule::where('movie_id', $id)->orderBy('start_time')->get();
-        $schedules = $schedule->merge($dbSchedules);
-
-        return view('lists.show', compact('movie', 'schedules'));
-    }
-
-
-
-
-
-
-
-    /*public function show(Request $request, $id)
-    {
-        $movie = Movie::find($id);
-
-        $schedules = [];
-        $now = now();
-        for ($i = 0; $i < 3; $i++) {
-            $start_time = $now->copy()->addHours($i * 3); // スケジュールを3時間ごとに作成
-            $end_time = $start_time->copy()->addHours(1);
-            $schedule = Schedule::create([
-                'movie_id' => $id,
-                'start_time' => $start_time,
-                'end_time' => $end_time,
-            ]);
-        $schedules[] = $schedule;
-    }
-
-        // スケジュールを昇順に並べ替え
-        $sortedSchedules = collect($schedules)->sortBy('start_time');
-
-        return view('lists.show', compact('movie', 'schedules'));
-}
-*/
 
 
 
